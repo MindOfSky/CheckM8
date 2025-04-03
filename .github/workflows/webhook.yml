@@ -1,0 +1,17 @@
+name: GitHub to Discord
+
+on:
+  push:
+    branches:
+      - main  # Change selon ton besoin
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  discord_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Discord Webhook Formatter
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
