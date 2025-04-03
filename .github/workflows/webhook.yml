@@ -3,7 +3,7 @@ name: GitHub to Discord
 on:
   push:
     branches:
-      - main  # Change selon ton besoin
+      - main  # Ou une autre branche
   pull_request:
     types: [opened, closed]
 
@@ -11,7 +11,19 @@ jobs:
   discord_notification:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Discord Webhook Formatter
-        uses: Ilshidur/action-discord@master
+      - name: Envoyer un message formaté sur Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST "$DISCORD_WEBHOOK" -d '{
+            "username": "'"$GITHUB_ACTOR"'",
+            "avatar_url": "https://github.com/'"$GITHUB_ACTOR"'.png",
+            "embeds": [{
+              "title": "Mise à jour sur **'"$GITHUB_REPO"'**",
+              "description": "Commit pushé par **'"$GITHUB_ACTOR"'**",
+              "color": 0x000000,
+              "footer": { "text": "GitHub Actions", "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" }
+            }]
+          }'
