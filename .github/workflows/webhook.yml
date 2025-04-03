@@ -14,16 +14,13 @@ jobs:
       - name: Envoyer un message formaté sur Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_REPO: ${{ github.repository }}
         run: |
-          curl -H "Content-Type: application/json" -X POST "$DISCORD_WEBHOOK" -d '{
-            "username": "'"$GITHUB_ACTOR"'",
-            "avatar_url": "https://github.com/'"$GITHUB_ACTOR"'.png",
-            "embeds": [{
-              "title": "Mise à jour sur **'"$GITHUB_REPO"'**",
-              "description": "Commit pushé par **'"$GITHUB_ACTOR"'**",
-              "color": 0x000000,
-              "footer": { "text": "GitHub Actions", "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" }
-            }]
-          }'
+          PAYLOAD=$(jq -n \
+            --arg username "$GITHUB_ACTOR" \
+            --arg avatar_url "https://github.com/$GITHUB_ACTOR.png" \
+            --arg title "Mise à jour sur $GITHUB_REPOSITORY" \
+            --arg description "Commit pushé par **$GITHUB_ACTOR**" \
+            --argjson color 0 \
+            '{ username: $username, avatar_url: $avatar_url, embeds: [{ title: $title, description: $description, color: $color }] }')
+
+          curl -H "Content-Type: application/json" -X POST "$DISCORD_WEBHOOK" -d "$PAYLOAD"
