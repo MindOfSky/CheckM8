@@ -3,17 +3,17 @@
     padding: 0;
 }
 
-body {
+.chess {
     display: grid;
     place-items: center;
     overflow-x: hidden;
 }
 
-h1 {
+.chess h1 {
     margin: 10px;
 }
 
-ul {
+.chess ul {
     display: grid;
     grid-template-columns: 1fr;
 }
@@ -22,7 +22,7 @@ ul {
     display: flex;
 }
 
-li {
+.chess li {
     list-style: none;
     display: grid;
     place-items: center;
@@ -58,22 +58,4 @@ li {
     float: right;
     margin-right: 50px;
 
-}
-
-
-@media (max-width:650px){
-
-    #tog {
-        margin-bottom: 70px;
-
-    }
-
-    .box {
-        width: 11vw;
-        height: 11vw;
-    }
-
-    .allimg {
-        width: 7vw;
-    }
 }
