@@ -14,6 +14,7 @@ function insertImage() {
 
                 image.innerHTML = `${image.innerText} <img class='allimg' src="${image.innerText}.png" alt="">`
                 image.style.cursor = 'pointer'
+                
             }
         }
     })
@@ -693,3 +694,4 @@ document.querySelectorAll('.box').forEach(ee => {
         }
     })
 })
+
