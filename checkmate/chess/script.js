@@ -695,3 +695,21 @@ document.querySelectorAll('.box').forEach(ee => {
     })
 })
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Fonction minmax start
+
+const piecesscores = {  //Score des pièces
+    Wpawn: 1,
+    Bpawn: 1,
+    Wknight: 3,
+    Bknight: 3,
+    Wbishop: 3,
+    Bbishop: 3,
+    Wrook: 5,
+    Brook: 5,
+    Wqueen: 9,
+    Bqueen: 9,
+    Wking: 1000,  
+    Bking: 1000
+  };
+  
