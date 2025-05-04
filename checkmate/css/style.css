@@ -328,6 +328,9 @@ a:focus {
   background-color: #353434;
   border-radius: 100%;
 }
+.imgur{
+  height: 30px;
+}
 
 .do_section .do_container .box .img-box img {
   width: 45px;
