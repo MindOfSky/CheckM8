@@ -47,7 +47,7 @@ function coloring() {
     })
 }
 coloring()
-
+            
 
 
 
@@ -525,7 +525,7 @@ document.querySelectorAll('.box').forEach(item => {
         if (tog % 2 == 0) {
             document.getElementById('tog').innerText = "Tour des NOIRS"
             //console.log('BlackTurn') 
-            // Console.log pour plustard car ce sera pour le Bot checkmate
+            // Console.log pour plus tard car ce sera pour le Bot checkmate
             whosTurn('B')
         }
 
@@ -698,18 +698,99 @@ document.querySelectorAll('.box').forEach(ee => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Fonction minmax start
 
-const piecesscores = {  //Score des pièces
-    Wpawn: 1,
-    Bpawn: 1,
-    Wknight: 3,
-    Bknight: 3,
-    Wbishop: 3,
-    Bbishop: 3,
-    Wrook: 5,
-    Brook: 5,
-    Wqueen: 9,
-    Bqueen: 9,
-    Wking: 1000,  
-    Bking: 1000
-  };
-  
+
+
+function evaluateBoard() { //Evaluation du plateau
+    let score = 0; //Baseline
+    document.querySelectorAll('.box').forEach(box => {
+        const val = box.innerText; //Pour chaque pièce sur le plateau attribuer une valeur 
+        if (val.includes('pawn')) score += val.startsWith('W') ? 10 : -10; //Si c'est un pion blanc +10 sinon -10 erc...
+        if (val.includes('rook')) score += val.startsWith('W') ? 50 : -50;
+        if (val.includes('knight')) score += val.startsWith('W') ? 30 : -30;
+        if (val.includes('bishop')) score += val.startsWith('W') ? 30 : -30;
+        if (val.includes('queen')) score += val.startsWith('W') ? 90 : -90;
+        if (val.includes('king')) score += val.startsWith('W') ? 900 : -900;
+    });
+    return score;
+}
+
+// Récupère les coups possibles pour par couleur
+function getAllLegalMoves(color) {
+    const moves = [];
+    document.querySelectorAll('.box').forEach(box => {
+        if (box.innerText.startsWith(color)) {
+            box.click();
+            document.querySelectorAll('.box').forEach(target => {
+                if (target.style.backgroundColor == 'green' || target.style.backgroundColor == 'aqua') {
+                    moves.push({
+                        from: box.id,
+                        to: target.id
+                    });
+                }
+            });
+            coloring();
+            insertImage();
+        }
+    });
+    return moves;
+}
+
+// Joue un mouvement
+function makeMove(move) {
+    const fromBox = document.getElementById(move.from); //Choisis la pièce à bouger
+    const toBox = document.getElementById(move.to); //Choisis ou la bouger
+    toBox.innerText = fromBox.innerText;
+    fromBox.innerText = '';
+    coloring();
+    insertImage();
+    tog++; // Change le coup
+}
+
+// Fonction Minimax
+//Pour évaluer les coups possibles 
+function minmax(depth) { //depth = profondeur de recherche
+    const moves = getAllLegalMoves('B'); //On récupere les coups légaux
+    let bestScore = Infinity; //Le meilleur score est infini au départ
+    let bestMove = null; //On a pas encore de meilleur coup
+
+    for (let move of moves) {
+        const fromBox = document.getElementById(move.from);
+        const toBox = document.getElementById(move.to);
+        const originalFrom = fromBox.innerText;
+        const originalTo = toBox.innerText;
+
+        // Simule le coup
+        toBox.innerText = originalFrom;
+        fromBox.innerText = '';
+        const score = evaluateBoard();
+
+        // Retour en arrière
+        fromBox.innerText = originalFrom;
+        toBox.innerText = originalTo;
+
+        if (score < bestScore) {
+            bestScore = score;
+            bestMove = move;
+        }
+    }
+    return bestMove;
+}
+
+// Lancer l'algorithme après le tour blanc
+function botPlay() {
+    if (tog % 2 === 0) { // Tour des noirs
+        setTimeout(() => {
+            const best = minmax(5); // Profondeur 5 pour une meilleure évaluation
+            if (best) {
+                makeMove(best);
+            }
+        }, 500);
+    }
+}
+
+// Observe les clics pour déclencher le bot après le coup blanc
+document.querySelectorAll('.box').forEach(box => {
+    box.addEventListener('click', () => {
+        setTimeout(botPlay, 500);
+    });
+});

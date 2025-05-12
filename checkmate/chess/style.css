@@ -59,3 +59,7 @@
     margin-right: 50px;
 
 }
+.tableau table tr td {
+    display: block;
+    padding-left: 10px;
+}
