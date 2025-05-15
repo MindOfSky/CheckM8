@@ -167,11 +167,11 @@ document.querySelectorAll('.box').forEach(item => {
                             document.getElementById(`b${a + 200}`).style.backgroundColor = 'green'
                         }
                     }
-                    // xon peut bouger le pion d'une case vers l'avant (si la case est vide)
+                    // on peut bouger le pion d'une case vers l'avant (si la case est vide)
                     if (aup !== 200 && document.getElementById(`b${a + 100}`).innerText.length == 0) {
                         document.getElementById(`b${a + 100}`).style.backgroundColor = 'green'
                     }
-                    // Check a droite si on peut mangar
+                    // Check a droite si on peut manger
                     if (aside < 8 && document.getElementById(`b${a + 100 + 1}`).innerText.length !== 0) {
                         document.getElementById(`b${a + 100 + 1}`).style.backgroundColor = 'green'
                     }
