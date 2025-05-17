@@ -784,7 +784,7 @@ function botPlay() {
             if (best) {
                 makeMove(best);
             }
-        }, 500);
+        }, 2000);
     }
 }
 
